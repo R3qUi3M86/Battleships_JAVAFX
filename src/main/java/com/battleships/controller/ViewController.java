@@ -34,7 +34,7 @@ public final class ViewController {
     }
 
     public void displayPlacementPhase(){
-        placementRenderer.renderGameState();
+        placementRenderer.renderPlacementPhase();
     }
 
     public void displayGameState(){
