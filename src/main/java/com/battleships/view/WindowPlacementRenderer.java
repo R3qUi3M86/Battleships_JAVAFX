@@ -1,29 +1,22 @@
 package com.battleships.view;
 
 import com.battleships.BattleshipsWindowed;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 
-public class WindowGameRenderer {
-    Scene menuScene;
-    Scene gameScene;
+public class WindowPlacementRenderer {
+    Scene placementScene;
     Image whitePawnImg;
     Image whiteQueenImg;
     Image blackPawnImg;
     Image blackQueenImg;
-    WindowGameController windowGameController = new WindowGameController();
+    WindowPlacementController windowPlacementController = new WindowPlacementController();
 
-    public WindowGameRenderer(){
+    public WindowPlacementRenderer(){
         URL whitePawnURL = BattleshipsWindowed.class.getResource("pictures/white_pawn.png");
         URL whiteQueenURL = BattleshipsWindowed.class.getResource("pictures/white_queen.png");
         URL blackPawnURL = BattleshipsWindowed.class.getResource("pictures/black_pawn.png");
@@ -51,7 +44,7 @@ public class WindowGameRenderer {
         region.setPrefSize(70,70);
         region.setId(String.valueOf(fieldNo));
         boardGrid.add(region, col, row);
-        windowGameController.addDropzoneEnterListener(region);
+        windowPlacementController.addDropzoneEnterListener(region);
     }
 
     public void askForMoveInput() {

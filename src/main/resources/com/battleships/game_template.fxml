@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="798.0" prefWidth="1418.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fitHeight="798.0" fitWidth="1418.0">
+         <image>
+            <Image url="@sea-bg.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="infoText" fill="#4665a4" layoutX="196.0" layoutY="418.0" stroke="BLACK" strokeType="OUTSIDE" text="Text" textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Black" size="49.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>

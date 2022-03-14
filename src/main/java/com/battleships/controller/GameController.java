@@ -25,19 +25,13 @@ public final class GameController {
     public void initSelectedMenuOption(int number){
         MainMenu.MenuOptions menuOption = MainMenu.MenuOptions.values()[number-1];
         switch (menuOption){
-            case PLAY -> initCheckersGame();
+            case PLAY -> ViewController.getInstance().displayPlacementPhase();
             case SETTINGS -> ViewController.getInstance().displaySettingsMenu();
             case QUIT -> System.exit(0);
         }
     }
 
-    private void initCheckersGame(){
-        // prepare game
-        startGame();
-    }
-
-    private void startGame() {
-        //start game
+    private void startGame(){
     }
 
     private void play(){
