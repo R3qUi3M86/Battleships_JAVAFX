@@ -6,8 +6,12 @@ public final class GameController {
     private static GameController gameController;
     private GameMode gameMode = GameMode.PLAYER_VS_PLAYER;
     private ShootingMode shootingMode = ShootingMode.DYNAMIC;
-    private int boardSize = 5;
+    private int boardSize = 10;
     private int shotsPerPlayer = 3;
+    private GameState gameState;
+    private ShipDeployer shipDeployer = new ShipDeployer();
+    private Player currentPlayer;
+    private ShipOrientation shipOrientation = ShipOrientation.HORIZONTAL;
 
     private GameController(){}
 
@@ -25,13 +29,25 @@ public final class GameController {
     public void initSelectedMenuOption(int number){
         MainMenu.MenuOptions menuOption = MainMenu.MenuOptions.values()[number-1];
         switch (menuOption){
-            case PLAY -> ViewController.getInstance().displayPlacementPhase();
+            case PLAY -> startGame();
             case SETTINGS -> ViewController.getInstance().displaySettingsMenu();
             case QUIT -> System.exit(0);
         }
     }
 
     private void startGame(){
+        gameState = new GameState(boardSize);
+        determineCurrentPlayer();
+        ViewController.getInstance().displayPlacementPhase();
+    }
+
+    private void determineCurrentPlayer(){
+        if ((int)Math.floor(Math.random()*(2)+1) == 1){
+            currentPlayer = Player.PLAYER1;
+        } else {
+            currentPlayer = Player.PLAYER2;
+        }
+        System.out.println(currentPlayer);
     }
 
     private void play(){
@@ -49,6 +65,14 @@ public final class GameController {
     }
 
     public void playMove() {
+    }
+
+    public void switchShipOrientation(){
+        if (shipOrientation == ShipOrientation.HORIZONTAL){
+            shipOrientation = ShipOrientation.VERTICAL;
+        } else {
+            shipOrientation = ShipOrientation.HORIZONTAL;
+        }
     }
 
     //GETTERS AND SETTERS
@@ -82,5 +106,21 @@ public final class GameController {
 
     public void setShotsPerPlayer(int shotsPerPlayer) {
         this.shotsPerPlayer = shotsPerPlayer;
+    }
+
+    public GameState getGameState(){
+        return gameState;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public ShipOrientation getShipOrientation() {
+        return shipOrientation;
+    }
+
+    public ShipDeployer getShipDeployer(){
+        return shipDeployer;
     }
 }

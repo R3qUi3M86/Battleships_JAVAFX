@@ -1,6 +1,7 @@
 package com.battleships.view;
 
 import com.battleships.BattleshipsWindowed;
+import com.battleships.model.Player;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -32,6 +33,7 @@ public class WindowPlacementRenderer {
         loadScene(fxmlLoader);
         windowPlacementController = fxmlLoader.getController();
         window.setScene(placementScene);
+        windowPlacementController.initPlacement();
     }
 
     private void addPieceToBoard() {
