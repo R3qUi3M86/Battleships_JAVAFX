@@ -12,6 +12,10 @@ public class Board {
         }
     }
 
+    public BoardField[][] getBoardFields() {
+        return boardFields;
+    }
+
     public BoardField getBoardField(int[] coordinate){
         return boardFields[coordinate[0]][coordinate[1]];
     }

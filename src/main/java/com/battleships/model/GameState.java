@@ -13,6 +13,8 @@ public class GameState {
     private final Board player2Board;
     private final ArrayList<Ship> player1ships = new ArrayList<>();
     private final ArrayList<Ship> player2ships = new ArrayList<>();
+    private final HashMap<String, ShipModule> player1shipsModules = new HashMap<>();
+    private final HashMap<String, ShipModule> player2shipsModules = new HashMap<>();
 
     public GameState(int boardSize){
         this.boardSize = boardSize;
@@ -58,17 +60,19 @@ public class GameState {
         }
     }
 
+    public boolean allShipsAreAfloat(){
+        HashMap<ShipType, Integer> shipsInPort = getCurrentPlayerShipsInPort();
+        for (ShipType shipType : shipsInPort.keySet()){
+            if (shipsInPort.get(shipType) != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     //GETTERS AND SETTERS
     public int getBoardSize() {
         return boardSize;
-    }
-
-    public HashMap<ShipType, Integer> getPlayer1shipsInPort(){
-        return player1shipsInPort;
-    }
-
-    public HashMap<ShipType, Integer> getPlayer2shipsInPort(){
-        return player2shipsInPort;
     }
 
     public Board getCurrentPlayerBoard() {
@@ -77,7 +81,6 @@ public class GameState {
         } else {
             return player2Board;
         }
-
     }
 
     public Board getEnemyPlayerBoard() {
@@ -85,6 +88,46 @@ public class GameState {
             return player2Board;
         } else {
             return player1Board;
+        }
+    }
+
+    public HashMap<ShipType, Integer> getCurrentPlayerShipsInPort() {
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player1shipsInPort;
+        } else {
+            return player2shipsInPort;
+        }
+    }
+
+    public ArrayList<Ship> getCurrentPlayerShips(){
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player1ships;
+        } else {
+            return player2ships;
+        }
+    }
+
+    public ArrayList<Ship> getEnemyPlayerShips(){
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player2ships;
+        } else {
+            return player1ships;
+        }
+    }
+
+    public HashMap<String, ShipModule> getCurrentPlayerShipsModules(){
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player1shipsModules;
+        } else {
+            return player2shipsModules;
+        }
+    }
+
+    public HashMap<String, ShipModule> getEnemyPlayerShipsModules(){
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player2shipsModules;
+        } else {
+            return player1shipsModules;
         }
     }
 }

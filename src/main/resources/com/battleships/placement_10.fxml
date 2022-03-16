@@ -15,7 +15,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.battleships.view.WindowPlacementController">
    <children>
-      <ImageView fitHeight="800.0" fitWidth="1400.0">
+      <ImageView fx:id="seaImgView" fitHeight="800.0" fitWidth="1400.0">
          <image>
             <Image url="@pictures/sea-bg.png" />
          </image>
@@ -60,12 +60,12 @@
             <Image url="@pictures/battleship.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="portImgCR" fitHeight="61.0" fitWidth="100.0" layoutX="96.0" layoutY="344.0">
+      <ImageView fx:id="portImgCR" fitHeight="50.0" fitWidth="100.0" layoutX="96.0" layoutY="350.0">
          <image>
             <Image url="@pictures/cruiser.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="portImgGB" fitHeight="49.0" fitWidth="49.0" layoutX="97.0" layoutY="299.0">
+      <ImageView fx:id="portImgGB" fitHeight="50.0" fitWidth="50.0" layoutX="97.0" layoutY="299.0">
          <image>
             <Image url="@pictures/gunboat.png" />
          </image>
@@ -80,7 +80,7 @@
             <Font name="Arial Rounded MT Bold" size="43.0" />
          </font>
       </Text>
-      <Button fx:id="doneBtn" layoutX="1155.0" layoutY="368.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="134.0" style="-fx-font-size: 18; visibility: hidden;" styleClass="dark-button" stylesheets="@button_style.css" text="DONE">
+      <Button fx:id="doneBtn" layoutX="1155.0" layoutY="368.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="134.0" style="-fx-font-size: 18;" styleClass="dark-button" stylesheets="@button_style.css" text="DONE">
          <font>
             <Font size="14.0" />
          </font>
@@ -89,6 +89,32 @@
          </cursor>
       </Button>
       <Region fx:id="boardRegion" layoutX="400.0" layoutY="100.0" prefHeight="600.0" prefWidth="600.0" />
+      <GridPane fx:id="shipGrid" layoutX="450.0" layoutY="150.0" prefHeight="500.0" prefWidth="500.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
       <GridPane fx:id="boardGrid" layoutX="450.0" layoutY="150.0" prefHeight="500.0" prefWidth="500.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -116,6 +142,11 @@
         </rowConstraints>
       </GridPane>
       <Text fx:id="playerPhaseInfo" fill="#3f83d7" layoutX="187.0" layoutY="69.0" stroke="BLACK" text="Player-# placement phase" textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="43.0" />
+         </font>
+      </Text>
+      <Text fx:id="donePlacementText" fill="#3f83d7" layoutX="187.0" layoutY="360.0" stroke="BLACK" style="visibility: hidden;" text="Player-# ships are afloat!&#10;&#10;click to continue..." textAlignment="CENTER" wrappingWidth="1026.13671875">
          <font>
             <Font name="Arial Rounded MT Bold" size="43.0" />
          </font>

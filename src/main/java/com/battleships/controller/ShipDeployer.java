@@ -2,6 +2,8 @@ package com.battleships.controller;
 
 import com.battleships.model.*;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -72,6 +74,19 @@ public class ShipDeployer {
     }
 
     public void deployShip(ShipType shipType, int[] origin){
+        GameState gameState = GameController.getInstance().getGameState();
+        Ship deployedShip = new Ship(shipType, origin, GameController.getInstance().getShipOrientation());
+        gameState.getCurrentPlayerShips().add(deployedShip);
+        decrementPortShipsQuantity(shipType);
+        HashMap<int[], ShipModule> shipModules = deployedShip.getShipModules();
+        for (int[] coordinate : shipModules.keySet()){
+            gameState.getCurrentPlayerShipsModules().put(Arrays.toString(coordinate), shipModules.get(coordinate));
+            gameState.getCurrentPlayerBoard().getBoardField(coordinate).setFieldContent(FieldContent.MODULE);
+        }
+    }
 
+    private void decrementPortShipsQuantity(ShipType shipType){
+        HashMap<ShipType, Integer> currPlayerPortShips = GameController.getInstance().getGameState().getCurrentPlayerShipsInPort();
+        currPlayerPortShips.put(shipType, currPlayerPortShips.get(shipType) - 1);
     }
 }

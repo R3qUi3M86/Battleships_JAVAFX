@@ -1,19 +1,11 @@
 package com.battleships.view;
 
 import com.battleships.BattleshipsWindowed;
-import com.battleships.model.Player;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class WindowPlacementRenderer {
     Scene placementScene;
@@ -33,25 +25,7 @@ public class WindowPlacementRenderer {
         loadScene(fxmlLoader);
         windowPlacementController = fxmlLoader.getController();
         window.setScene(placementScene);
+        windowPlacementController.addRotateKeyPressListener(placementScene);
         windowPlacementController.initPlacement();
-    }
-
-    private void addPieceToBoard() {
-    }
-
-    public void askForMoveInput() {
-    }
-
-    private void getPreviousPlayerMove(){
-    }
-
-    private void getInvalidMoveInfo(){
-    }
-
-    public void renderFinalScore() {
-
-    }
-
-    public void pressAnyKeyPromptForBackToMenu() {
     }
 }

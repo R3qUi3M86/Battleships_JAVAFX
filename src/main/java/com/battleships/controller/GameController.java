@@ -9,7 +9,7 @@ public final class GameController {
     private int boardSize = 10;
     private int shotsPerPlayer = 3;
     private GameState gameState;
-    private ShipDeployer shipDeployer = new ShipDeployer();
+    private final ShipDeployer shipDeployer = new ShipDeployer();
     private Player currentPlayer;
     private ShipOrientation shipOrientation = ShipOrientation.HORIZONTAL;
 
@@ -41,6 +41,12 @@ public final class GameController {
         ViewController.getInstance().displayPlacementPhase();
     }
 
+    public void startNextPlacementPhase(){
+        switchPlayers();
+        shipOrientation = ShipOrientation.HORIZONTAL;
+        ViewController.getInstance().displayPlacementPhase();
+    }
+
     private void determineCurrentPlayer(){
         if ((int)Math.floor(Math.random()*(2)+1) == 1){
             currentPlayer = Player.PLAYER1;
@@ -50,8 +56,9 @@ public final class GameController {
         System.out.println(currentPlayer);
     }
 
-    private void play(){
+    public void playRound(){
         ViewController.getInstance().displayGameState();
+        System.out.println("play round");
         //ask player to move
     }
 
@@ -72,6 +79,14 @@ public final class GameController {
             shipOrientation = ShipOrientation.VERTICAL;
         } else {
             shipOrientation = ShipOrientation.HORIZONTAL;
+        }
+    }
+
+    private void switchPlayers(){
+        if (currentPlayer == Player.PLAYER1){
+            currentPlayer = Player.PLAYER2;
+        } else {
+            currentPlayer = Player.PLAYER1;
         }
     }
 
