@@ -13,7 +13,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class WindowPlacementController {
@@ -44,11 +43,12 @@ public class WindowPlacementController {
     public Region boardRegion;
 
     private Rectangle activeSelector;
+    private final CommonPhaseController commonPhaseController = new CommonPhaseController(this);
 
     public void initialize(){
         setSelectorConstants();
         addPortUIActionListeners();
-        addBoardGridUIActionListener();
+        commonPhaseController.addBoardGridUIActionListener(boardGrid, GamePhase.DEPLOYMENT);
         doneBtn.setVisible(false);
         doneBtn.setOnAction(e -> doneShipPlacementHandler());
         boardRegion.setOnMouseEntered(e -> hideBoardFieldSelector());
@@ -144,17 +144,6 @@ public class WindowPlacementController {
         });
     }
 
-    private void addBoardGridUIActionListener(){
-        for (int i = 0; i < GameController.getInstance().getBoardSize(); i++){
-            for (int j = 0; j < GameController.getInstance().getBoardSize(); j++){
-                Region region = new Region();
-                boardGrid.add(region, i, j);
-                region.setOnMouseEntered(this::onGridMouseEnter);
-                region.setOnMouseClicked(this::onGridMouseClick);
-            }
-        }
-    }
-
     public void addRotateKeyPressListener(Scene currentScene){
         currentScene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.R){
@@ -163,7 +152,7 @@ public class WindowPlacementController {
         });
     }
 
-    private void onGridMouseEnter(MouseEvent event){
+    public void onGridMouseEnter(MouseEvent event){
         if (activeSelector != null) {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
@@ -176,7 +165,7 @@ public class WindowPlacementController {
         }
     }
 
-    private void onGridMouseClick(MouseEvent event){
+    public void onGridMouseClick(MouseEvent event){
         if (activeSelector != null) {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
@@ -185,7 +174,7 @@ public class WindowPlacementController {
                 GameController.getInstance().getShipDeployer().deployShip(deployedShip, coordinate);
                 setShipsAmmount(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
                 disableVoidShipsUI(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
-                drawShipsOnBoardGrid();
+                commonPhaseController.drawShipsOnBoardGrid(shipGrid);
                 hideBoardFieldSelector();
                 if (GameController.getInstance().getGameState().allShipsAreAfloat()){
                     doneBtn.setVisible(true);
@@ -230,60 +219,5 @@ public class WindowPlacementController {
         } else {
             return ShipType.CARRIER;
         }
-    }
-
-    private void drawShipsOnBoardGrid(){
-        shipGrid.getChildren().clear();
-        Board board = GameController.getInstance().getGameState().getCurrentPlayerBoard();
-        HashMap<String, ShipModule> shipModules = GameController.getInstance().getGameState().getCurrentPlayerShipsModules();
-
-        for (int i = 0; i < GameController.getInstance().getBoardSize(); i++){
-            for (int j = 0; j < GameController.getInstance().getBoardSize(); j++){
-
-                int[] coordinate = new int[]{i,j};
-                if (board.getBoardField(coordinate).getFieldContent() == FieldContent.MODULE &&
-                        shipModules.get(Arrays.toString(coordinate)).isOrigin()){
-                    Ship ship = shipModules.get(Arrays.toString(coordinate)).getShip();
-                    ShipType shipType = ship.getShipType();
-                    ShipOrientation orientation = ship.getShipOrientation();
-                    drawShip(coordinate, shipType, orientation);
-                }
-            }
-        }
-    }
-
-    private void drawShip(int[] coordinate, ShipType shipType, ShipOrientation shipOrientation){
-        ImageView shipImgView = null;
-        switch (shipType){
-            case GUN_BOAT -> {
-                shipImgView = new ImageView(portImgGB.getImage());
-                shipImgView.setFitWidth(50);
-                shipImgView.setFitHeight(50);
-            }
-            case CRUISER -> {
-                shipImgView = new ImageView(portImgCR.getImage());
-                shipImgView.setFitWidth(100);
-                shipImgView.setFitHeight(50);
-            }
-            case BATTLESHIP -> {
-                shipImgView = new ImageView(portImgBB.getImage());
-                shipImgView.setFitWidth(150);
-                shipImgView.setFitHeight(50);
-            }
-            case CARRIER -> {
-                shipImgView = new ImageView(portImgCA.getImage());
-                shipImgView.setFitWidth(200);
-                shipImgView.setFitHeight(50);
-            }
-        }
-        if (shipOrientation == ShipOrientation.VERTICAL){
-            shipImgView.setRotate(90);
-            switch (shipType){
-                case CRUISER -> {shipImgView.setTranslateX(-25); shipImgView.setTranslateY(25);}
-                case BATTLESHIP -> {shipImgView.setTranslateX(-50); shipImgView.setTranslateY(50);}
-                case CARRIER -> {shipImgView.setTranslateX(-75); shipImgView.setTranslateY(75);}
-            }
-        }
-        shipGrid.add(shipImgView, coordinate[1], coordinate[0]);
     }
 }
