@@ -1,10 +1,11 @@
 package com.battleships.view;
 
-import com.battleships.BattleshipsWindowed;
 import com.battleships.controller.GameController;
+import com.battleships.controller.ViewController;
 import com.battleships.model.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,10 +14,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-
-import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class WindowRoundController {
     @FXML
@@ -27,6 +24,7 @@ public class WindowRoundController {
     public ImageView seaImgView;
     public Rectangle boardFldSelector;
     public Button endTurnBtn;
+    public Button backToMenuBtn;
     public GridPane enemyShipGrid;
     public GridPane enemyBoardGrid;
     public GridPane enemyShootingOverlay;
@@ -47,7 +45,6 @@ public class WindowRoundController {
         Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
         Board currPlayerFOWBoard = GameController.getInstance().getGameState().getCurrentFogOfWarBoard();
         Board enemyPlayerFOWBoard = GameController.getInstance().getGameState().getEnemyFogOfWarBoard();
-        commonPhaseController.setPlayerNumber(playerPhaseInfo);
         commonPhaseController.setPlayerNumber(playerTurnCornerInfo);
         commonPhaseController.drawShipsOnBoardGrid(playerShipGrid, currPlayerBoard, currPlayer);
         commonPhaseController.drawShipsOnBoardGrid(enemyShipGrid, enemyPlayerFOWBoard, enemyPlayer);
@@ -57,7 +54,19 @@ public class WindowRoundController {
         setShotsAmountInfo();
         endTurnBtn.setVisible(false);
         endTurnBtn.setOnAction(e -> endTurnHandler());
+        backToMenuBtn.setVisible(false);
+        backToMenuBtn.setOnAction(e -> backToMenuHandler());
         boardRegion.setOnMouseEntered(e -> commonPhaseController.hideBoardFieldSelector(boardFldSelector));
+    }
+
+    public void showPlayerPhaseOverlay(Scene scene){
+        seaImgView.toFront();
+        playerPhaseInfo.toFront();
+        commonPhaseController.setPlayerNumber(playerPhaseInfo);
+        scene.setOnMouseClicked(e ->{
+            playerPhaseInfo.setVisible(false);
+            seaImgView.toBack();
+        });
     }
 
     private void loadMarkerImages(){
@@ -125,13 +134,37 @@ public class WindowRoundController {
             case SUNK_BB -> shotPrompter.setText("Enemy battleship sunk!");
             case SUNK_CA -> shotPrompter.setText("Enemy carrier sunk!");
         }
+        if ((shotResult == ShotResult.SUNK_GB || shotResult == ShotResult.SUNK_CR ||
+                shotResult == ShotResult.SUNK_BB || shotResult == ShotResult.SUNK_CA) &&
+                GameController.getInstance().playerHasWon()){
+            showEndGameResults();
+        }
+    }
+
+    private void showEndGameResults(){
+        Board enemyBoard = GameController.getInstance().getGameState().getEnemyPlayerBoard();
+        Player enemyPlayer = GameController.getInstance().getEnemyPlayer();
+        commonPhaseController.drawShipsOnBoardGrid(enemyShipGrid, enemyBoard, enemyPlayer);
+        playerTurnCornerInfo.setVisible(false);
+        shotsInfo.setVisible(false);
+        endTurnBtn.setVisible(false);
+        backToMenuBtn.setVisible(true);
+        setWinText();
+    }
+
+    private void setWinText(){
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            shotPrompter.setText("Player 2 ships sunk into abyss...\nPlayer 1 is victorious!");
+        } else {
+            shotPrompter.setText("Player 1 ships sunk into abyss...\nPlayer 2 is victorious!");
+        }
     }
 
     private void endTurnHandler(){
         GameController.getInstance().playRound();
     }
 
-    public void initRound(){
-
+    private void backToMenuHandler(){
+        ViewController.getInstance().displayMainMenu();
     }
 }

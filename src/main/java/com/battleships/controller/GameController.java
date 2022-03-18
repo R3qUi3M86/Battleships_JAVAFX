@@ -96,6 +96,10 @@ public final class GameController {
         }
     }
 
+    public boolean playerHasWon(){
+        return gameState.getEnemyPlayerShips().size() == 0;
+    }
+
     //GETTERS AND SETTERS
     public GameMode getGameMode() {
         return gameMode;

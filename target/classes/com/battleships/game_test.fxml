@@ -20,12 +20,25 @@
             <Image url="@pictures/sea-bg.png" />
          </image>
       </ImageView>
+      <Text fx:id="playerPhaseInfo" fill="#3f83d7" layoutX="187.0" layoutY="360.0" stroke="BLACK" text="Player-# turn&#10;&#10;click to continue..." textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="43.0" />
+         </font>
+      </Text>
       <ImageView fitHeight="600.0" fitWidth="600.0" layoutX="730.0" layoutY="100.0">
          <image>
             <Image url="@pictures/board10.png" />
          </image>
       </ImageView>
       <Rectangle fx:id="boardFldSelector" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="52.0" layoutX="779.0" layoutY="149.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" style="visibility: hidden;" width="52.0" />
+      <Button fx:id="backToMenuBtn" layoutX="1159.0" layoutY="724.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="171.0" style="-fx-font-size: 18;" styleClass="dark-button" stylesheets="@button_style.css" text="BACK TO MENU">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
       <Button fx:id="endTurnBtn" layoutX="1196.0" layoutY="724.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="134.0" style="-fx-font-size: 18;" styleClass="dark-button" stylesheets="@button_style.css" text="END TURN">
          <font>
             <Font size="14.0" />
@@ -113,14 +126,9 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Text fx:id="playerPhaseInfo" fill="#3f83d7" layoutX="7.0" layoutY="38.0" stroke="BLACK" text="Player-# turn" textAlignment="CENTER" wrappingWidth="188.40625">
+      <Text fx:id="playerTurnCornerInfo" fill="#3f83d7" layoutX="7.0" layoutY="38.0" stroke="BLACK" text="Player-# turn" textAlignment="CENTER" wrappingWidth="188.40625">
          <font>
             <Font name="Arial Rounded MT Bold" size="25.0" />
-         </font>
-      </Text>
-      <Text fx:id="playerTurnCornerInfo" fill="#3f83d7" layoutX="187.0" layoutY="360.0" stroke="BLACK" style="visibility: hidden;" text="Player-# turn&#10;&#10;click to continue..." textAlignment="CENTER" wrappingWidth="1026.13671875">
-         <font>
-            <Font name="Arial Rounded MT Bold" size="43.0" />
          </font>
       </Text>
       <Text fx:id="shotsInfo" fill="#3f83d7" layoutX="298.0" layoutY="760.0" stroke="BLACK" text="Shots: #">
