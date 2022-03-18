@@ -16,10 +16,6 @@ import javafx.scene.text.Text;
 import java.util.HashMap;
 
 public class WindowPlacementController {
-    private int LAYOUT_X_START;
-    private int LAYOUT_Y_START;
-    private int BASE_SIZE;
-
     @FXML
     public Text playerPhaseInfo;
     public Text donePlacementText;
@@ -46,29 +42,23 @@ public class WindowPlacementController {
     private final CommonPhaseController commonPhaseController = new CommonPhaseController(this);
 
     public void initialize(){
-        setSelectorConstants();
         addPortUIActionListeners();
         commonPhaseController.addBoardGridUIActionListener(boardGrid, GamePhase.DEPLOYMENT);
         doneBtn.setVisible(false);
         doneBtn.setOnAction(e -> doneShipPlacementHandler());
-        boardRegion.setOnMouseEntered(e -> hideBoardFieldSelector());
+        boardRegion.setOnMouseEntered(e -> commonPhaseController.hideBoardFieldSelector(boardFldSelector));
     }
 
     public void initPlacement(){
         HashMap<ShipType, Integer> shipsInPort = GameController.getInstance().getGameState().getCurrentPlayerShipsInPort();
-        setShipsAmmount(shipsInPort);
+        setShipsAmount(shipsInPort);
         disableVoidShipsUI(shipsInPort);
         hidePortSelectors();
-        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1) {
-            playerPhaseInfo.setText(playerPhaseInfo.getText().replace("#", "1"));
-            donePlacementText.setText(donePlacementText.getText().replace("#", "1"));
-        } else {
-            playerPhaseInfo.setText(playerPhaseInfo.getText().replace("#", "2"));
-            donePlacementText.setText(donePlacementText.getText().replace("#", "2"));
-        }
+        commonPhaseController.setPlayerNumber(playerPhaseInfo);
+        commonPhaseController.setPlayerNumber(donePlacementText);
     }
 
-    private void setShipsAmmount(HashMap<ShipType, Integer> shipsInPort){
+    private void setShipsAmount(HashMap<ShipType, Integer> shipsInPort){
         for (ShipType shipType : shipsInPort.keySet()){
             switch (shipType){
                 case GUN_BOAT -> portNoGB.setText("x"+shipsInPort.get(ShipType.GUN_BOAT).toString());
@@ -112,12 +102,6 @@ public class WindowPlacementController {
         selectPortCA.setOpacity(0);
     }
 
-    private void setSelectorConstants(){
-        LAYOUT_X_START = 449;
-        LAYOUT_Y_START = 149;
-        BASE_SIZE = 52;
-    }
-
     private void addPortUIActionListeners(){
         selectPortGB.setOnMouseClicked(e -> onPortUIBtnClick(selectPortGB));
         selectPortCR.setOnMouseClicked(e -> onPortUIBtnClick(selectPortCR));
@@ -156,11 +140,11 @@ public class WindowPlacementController {
         if (activeSelector != null) {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
-            ShipType deployedShip = getDeployedShipType();
-            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShip, coordinate)){
-                showBoardFieldSelector(deployedShip, coordinate);
+            ShipType deployedShipType = getDeployedShipType();
+            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShipType, coordinate)){
+                commonPhaseController.showBoardFieldSelector(deployedShipType, coordinate, boardFldSelector);
             } else {
-                hideBoardFieldSelector();
+                commonPhaseController.hideBoardFieldSelector(boardFldSelector);
             }
         }
     }
@@ -172,41 +156,16 @@ public class WindowPlacementController {
             ShipType deployedShip = getDeployedShipType();
             if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShip, coordinate)){
                 GameController.getInstance().getShipDeployer().deployShip(deployedShip, coordinate);
-                setShipsAmmount(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
+                setShipsAmount(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
                 disableVoidShipsUI(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
-                commonPhaseController.drawShipsOnBoardGrid(shipGrid);
-                hideBoardFieldSelector();
+                Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+                commonPhaseController.drawShipsOnBoardGrid(shipGrid, currPlayerBoard, GameController.getInstance().getCurrentPlayer());
+                commonPhaseController.hideBoardFieldSelector(boardFldSelector);
                 if (GameController.getInstance().getGameState().allShipsAreAfloat()){
                     doneBtn.setVisible(true);
                 }
             }
         }
-    }
-
-    private void showBoardFieldSelector(ShipType deployedShip, int[] coordinate){
-        ShipOrientation shipOrientation = GameController.getInstance().getShipOrientation();
-        int sizeMultiplier = 0;
-        if (deployedShip == ShipType.CRUISER){
-            sizeMultiplier = 1;
-        } else if (deployedShip == ShipType.BATTLESHIP){
-            sizeMultiplier = 2;
-        } else if (deployedShip == ShipType.CARRIER){
-            sizeMultiplier = 3;
-        }
-        if (shipOrientation == ShipOrientation.HORIZONTAL){
-            boardFldSelector.setWidth(BASE_SIZE + (sizeMultiplier*50));
-            boardFldSelector.setHeight(BASE_SIZE);
-        } else {
-            boardFldSelector.setHeight(BASE_SIZE + (sizeMultiplier*50));
-            boardFldSelector.setWidth(BASE_SIZE);
-        }
-        boardFldSelector.setLayoutX(coordinate[1]*50+LAYOUT_X_START);
-        boardFldSelector.setLayoutY(coordinate[0]*50+LAYOUT_Y_START);
-        boardFldSelector.setVisible(true);
-    }
-
-    private void hideBoardFieldSelector(){
-        boardFldSelector.setVisible(false);
     }
 
     private ShipType getDeployedShipType(){

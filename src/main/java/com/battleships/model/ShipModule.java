@@ -29,4 +29,12 @@ public class ShipModule extends BoardField{
     public Ship getShip() {
         return ship;
     }
+
+    public void setModuleStatus(ModuleStatus moduleStatus) {
+        this.moduleStatus = moduleStatus;
+    }
+
+    public ModuleStatus getModuleStatus() {
+        return moduleStatus;
+    }
 }

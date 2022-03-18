@@ -20,4 +20,12 @@ public abstract class Utilities {
         }
         return false;
     }
+
+    public static int[] toArray(String string){
+        string = string.replace("[", "");
+        string = string.replace("]", "");
+        string = string.replace(" ", "");
+        String[] stringArr = string.split(",");
+        return new int[]{Integer.parseInt(stringArr[0]), Integer.parseInt(stringArr[1])};
+    }
 }

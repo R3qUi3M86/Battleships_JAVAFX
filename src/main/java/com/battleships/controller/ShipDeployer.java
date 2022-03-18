@@ -1,6 +1,7 @@
 package com.battleships.controller;
 
 import com.battleships.model.*;
+import com.battleships.util.Utilities;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,7 +19,11 @@ public class ShipDeployer {
     private Set<int[]> getShipDeploymentFields(ShipType shipType, int[] origin) {
         ShipOrientation shipOrientation = GameController.getInstance().getShipOrientation();
         Ship ship = new Ship(shipType, origin, shipOrientation);
-        return ship.getShipModules().keySet();
+        Set<int[]> shipFields = new HashSet<>();
+        for (String field : ship.getShipModules().keySet()){
+            shipFields.add(Utilities.toArray(field));
+        }
+        return shipFields;
     }
 
     private boolean moduleOutsideBoard(Set<int[]> shipFields) {
@@ -78,10 +83,10 @@ public class ShipDeployer {
         Ship deployedShip = new Ship(shipType, origin, GameController.getInstance().getShipOrientation());
         gameState.getCurrentPlayerShips().add(deployedShip);
         decrementPortShipsQuantity(shipType);
-        HashMap<int[], ShipModule> shipModules = deployedShip.getShipModules();
-        for (int[] coordinate : shipModules.keySet()){
-            gameState.getCurrentPlayerShipsModules().put(Arrays.toString(coordinate), shipModules.get(coordinate));
-            gameState.getCurrentPlayerBoard().getBoardField(coordinate).setFieldContent(FieldContent.MODULE);
+        HashMap<String, ShipModule> shipModules = deployedShip.getShipModules();
+        for (String coordinate : shipModules.keySet()){
+            gameState.getCurrentPlayerShipsModules().put(coordinate, shipModules.get(coordinate));
+            gameState.getCurrentPlayerBoard().getBoardField(Utilities.toArray(coordinate)).setFieldContent(FieldContent.MODULE);
         }
     }
 

@@ -11,15 +11,20 @@ public class GameState {
     private final HashMap<ShipType, Integer> player2shipsInPort = new HashMap<>();
     private final Board player1Board;
     private final Board player2Board;
+    private final Board player1FogOfWarBoard;
+    private final Board player2FogOfWarBoard;
     private final ArrayList<Ship> player1ships = new ArrayList<>();
     private final ArrayList<Ship> player2ships = new ArrayList<>();
     private final HashMap<String, ShipModule> player1shipsModules = new HashMap<>();
     private final HashMap<String, ShipModule> player2shipsModules = new HashMap<>();
+    private int currentPlayerShots;
 
     public GameState(int boardSize){
         this.boardSize = boardSize;
         player1Board = new Board(boardSize);
         player2Board = new Board(boardSize);
+        player1FogOfWarBoard = new Board(boardSize);
+        player2FogOfWarBoard = new Board(boardSize);
         setShipsInPort(player1shipsInPort);
         setShipsInPort(player2shipsInPort);
     }
@@ -71,10 +76,6 @@ public class GameState {
     }
 
     //GETTERS AND SETTERS
-    public int getBoardSize() {
-        return boardSize;
-    }
-
     public Board getCurrentPlayerBoard() {
         if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
             return player1Board;
@@ -88,6 +89,22 @@ public class GameState {
             return player2Board;
         } else {
             return player1Board;
+        }
+    }
+
+    public Board getCurrentFogOfWarBoard() {
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player1FogOfWarBoard;
+        } else {
+            return player2FogOfWarBoard;
+        }
+    }
+
+    public Board getEnemyFogOfWarBoard() {
+        if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
+            return player2FogOfWarBoard;
+        } else {
+            return player1FogOfWarBoard;
         }
     }
 
@@ -115,6 +132,14 @@ public class GameState {
         }
     }
 
+    public HashMap<String, ShipModule> getPlayerShipsModules(Player player){
+        if (player == Player.PLAYER1){
+            return player1shipsModules;
+        } else {
+            return player2shipsModules;
+        }
+    }
+
     public HashMap<String, ShipModule> getCurrentPlayerShipsModules(){
         if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1){
             return player1shipsModules;
@@ -129,5 +154,23 @@ public class GameState {
         } else {
             return player1shipsModules;
         }
+    }
+
+    public int getLargestShipAfloatSize(){
+        int largestShipSize = 1;
+        for (Ship ship : getCurrentPlayerShips()){
+            if (ship.getShipSize() > largestShipSize){
+                largestShipSize = ship.getShipSize();
+            }
+        }
+        return largestShipSize;
+    }
+
+    public int getCurrentPlayerShots(){
+        return currentPlayerShots;
+    }
+
+    public void setCurrentPlayerShots(int currentPlayerShots) {
+        this.currentPlayerShots = currentPlayerShots;
     }
 }

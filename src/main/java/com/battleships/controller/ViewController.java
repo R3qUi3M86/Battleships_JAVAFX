@@ -3,6 +3,7 @@ package com.battleships.controller;
 import com.battleships.model.MainMenu;
 import com.battleships.view.WindowPlacementRenderer;
 import com.battleships.view.WindowMenuRenderer;
+import com.battleships.view.WindowRoundRenderer;
 
 import java.util.ArrayList;
 
@@ -10,6 +11,7 @@ public final class ViewController {
     private static ViewController viewController;
     private final WindowMenuRenderer menuRenderer = new WindowMenuRenderer();
     private final WindowPlacementRenderer placementRenderer = new WindowPlacementRenderer();
+    private final WindowRoundRenderer roundRenderer = new WindowRoundRenderer();
 
     private ViewController(){}
 
@@ -37,7 +39,7 @@ public final class ViewController {
         placementRenderer.renderPlacementPhase();
     }
 
-    public void displayGameState(){
-
+    public void displayShootingPhase(){
+        roundRenderer.renderRoundPhase();
     }
 }

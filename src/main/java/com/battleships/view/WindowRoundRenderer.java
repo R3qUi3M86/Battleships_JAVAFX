@@ -21,7 +21,7 @@ public class WindowRoundRenderer {
     }
 
     public void renderRoundPhase() {
-        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("placement_10.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("game_10.fxml"));
         loadScene(fxmlLoader);
         windowRoundController = fxmlLoader.getController();
         window.setScene(roundScene);

@@ -1,6 +1,7 @@
 package com.battleships.controller;
 
 import com.battleships.model.*;
+import com.battleships.model.ShotResult;
 
 public final class GameController {
     private static GameController gameController;
@@ -57,21 +58,26 @@ public final class GameController {
     }
 
     public void playRound(){
-        ViewController.getInstance().displayGameState();
-        System.out.println("play round");
-        //ask player to move
+        switchPlayers();
+        setShotsForCurrentPlayer();
+        ViewController.getInstance().displayShootingPhase();
     }
 
-    private void askCurrentPlayerToMove(){
+    private void setShotsForCurrentPlayer(){
+        if (shootingMode == ShootingMode.STATIC){
+            gameState.setCurrentPlayerShots(shotsPerPlayer);
+        } else {
+            gameState.setCurrentPlayerShots(gameState.getLargestShipAfloatSize());
+        }
     }
 
     private void playerIsHuman(){
     }
 
-    public void takeGameInput() {
-    }
-
-    public void playMove() {
+    public ShotResult takeShotInput(int[] coordinate) {
+        Shooter shooter = new Shooter(gameState, coordinate);
+        shooter.shoot();
+        return shooter.getShotResult();
     }
 
     public void switchShipOrientation(){
@@ -129,6 +135,14 @@ public final class GameController {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Player getEnemyPlayer() {
+        if (currentPlayer == Player.PLAYER1){
+            return Player.PLAYER2;
+        } else {
+            return Player.PLAYER1;
+        }
     }
 
     public ShipOrientation getShipOrientation() {
