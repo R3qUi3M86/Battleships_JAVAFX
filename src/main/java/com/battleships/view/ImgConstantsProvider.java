@@ -3,10 +3,9 @@ package com.battleships.view;
 import com.battleships.controller.GameController;
 
 public abstract class ImgConstantsProvider {
-    private static final int boardSize = GameController.getInstance().getBoardSize();
 
     public static int getSelectorBaseSize(){
-        return switch (boardSize) {
+        return switch (GameController.getInstance().getBoardSize()) {
             case 10 -> 52;
             case 9 -> 56;
             case 8 -> 62;
@@ -18,7 +17,7 @@ public abstract class ImgConstantsProvider {
     }
 
     public static double getShipImgCellSize(){
-        return switch (boardSize) {
+        return switch (GameController.getInstance().getBoardSize()) {
             case 10 -> 50;
             case 9 -> 54.444;
             case 8 -> 60;
@@ -30,7 +29,7 @@ public abstract class ImgConstantsProvider {
     }
 
     public static int getPlacementLayoutXStart(){
-        return switch (boardSize) {
+        return switch (GameController.getInstance().getBoardSize()) {
             case 10 -> 449;
             case 9 -> 454;
             case 8 -> 456;
@@ -42,7 +41,7 @@ public abstract class ImgConstantsProvider {
     }
 
     public static int getShootingLayoutXStart(){
-        return switch (boardSize) {
+        return switch (GameController.getInstance().getBoardSize()) {
             case 10 -> 779;
             case 9 -> 784;
             case 8 -> 786;
@@ -54,7 +53,7 @@ public abstract class ImgConstantsProvider {
     }
 
     public static int getLayoutYStart(){
-        return switch (boardSize) {
+        return switch (GameController.getInstance().getBoardSize()) {
             case 10 -> 149;
             case 9 -> 154;
             case 8 -> 157;

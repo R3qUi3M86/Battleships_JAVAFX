@@ -4,7 +4,6 @@ import com.battleships.BattleshipsWindowed;
 import com.battleships.controller.GameMode;
 import com.battleships.controller.ShootingMode;
 import javafx.scene.Cursor;
-import javafx.scene.image.Image ;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class WindowMenuRenderer {
