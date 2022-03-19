@@ -21,7 +21,7 @@ public class WindowPlacementRenderer {
     }
 
     public void renderPlacementPhase() {
-        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("placement.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("placement_10.fxml"));
         loadScene(fxmlLoader);
         windowPlacementController = fxmlLoader.getController();
         window.setScene(placementScene);

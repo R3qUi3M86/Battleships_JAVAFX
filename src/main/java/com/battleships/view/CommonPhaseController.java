@@ -16,9 +16,9 @@ public class CommonPhaseController {
     WindowPlacementController windowPlacementController;
     WindowRoundController windowRoundController;
 
-    private int LAYOUT_X_START;
-    private int LAYOUT_Y_START;
-    private int BASE_SIZE;
+    private final int LAYOUT_X_START;
+    private final int LAYOUT_Y_START;
+    private final int BASE_SIZE;
 
     private Image gunboatImg;
     private Image cruiserImg;

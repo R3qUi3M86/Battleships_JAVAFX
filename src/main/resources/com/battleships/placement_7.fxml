@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.battleships.view.WindowPlacementController">
+   <children>
+      <ImageView fx:id="seaImgView" fitHeight="800.0" fitWidth="1400.0">
+         <image>
+            <Image url="@pictures/sea-bg.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="600.0" fitWidth="600.0" layoutX="400.0" layoutY="100.0">
+         <image>
+            <Image url="@pictures/board7.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="46.0" layoutY="249.0">
+         <image>
+            <Image url="@pictures/port.png" />
+         </image>
+      </ImageView>
+      <Text fx:id="portNoGB" fill="#85d4ff" layoutX="304.0" layoutY="335.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x1">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="portNoCR" fill="#85d4ff" layoutX="304.0" layoutY="386.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x1">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="portNoBB" fill="#85d4ff" layoutX="304.0" layoutY="435.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x1">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="32.0" />
+         </font>
+      </Text>
+      <Text fx:id="portNoCA" fill="#85d4ff" layoutX="304.0" layoutY="485.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x1">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="32.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="portImgCA" fitHeight="50.0" fitWidth="200.0" layoutX="96.0" layoutY="449.0">
+         <image>
+            <Image url="@pictures/carrier.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="portImgBB" fitHeight="50.0" fitWidth="150.0" layoutX="96.0" layoutY="400.0">
+         <image>
+            <Image url="@pictures/battleship.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="portImgCR" fitHeight="50.0" fitWidth="100.0" layoutX="96.0" layoutY="350.0">
+         <image>
+            <Image url="@pictures/cruiser.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="portImgGB" fitHeight="50.0" fitWidth="50.0" layoutX="97.0" layoutY="299.0">
+         <image>
+            <Image url="@pictures/gunboat.png" />
+         </image>
+      </ImageView>
+      <Rectangle fx:id="selectPortGB" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="52.0" layoutX="95.0" layoutY="298.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" width="52.0" />
+      <Rectangle fx:id="selectPortCR" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="52.0" layoutX="95.0" layoutY="348.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" width="102.0" />
+      <Rectangle fx:id="selectPortBB" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="52.0" layoutX="95.0" layoutY="398.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" width="152.0" />
+      <Rectangle fx:id="selectPortCA" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="52.0" layoutX="95.0" layoutY="448.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" width="202.0" />
+      <Rectangle fx:id="boardFldSelector" arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="68.0" layoutX="466.0" layoutY="166.0" stroke="#00ff3c" strokeType="INSIDE" strokeWidth="2.0" style="visibility: hidden;" width="68.0" />
+      <Text fill="#3f83d7" layoutX="187.0" layoutY="767.0" stroke="BLACK" text="Press &quot;R&quot; to rotate ship" textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="43.0" />
+         </font>
+      </Text>
+      <Button fx:id="doneBtn" layoutX="1155.0" layoutY="368.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="134.0" style="-fx-font-size: 18;" styleClass="dark-button" stylesheets="@button_style.css" text="DONE">
+         <font>
+            <Font size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Region fx:id="boardRegion" layoutX="400.0" layoutY="100.0" prefHeight="600.0" prefWidth="600.0" />
+      <GridPane fx:id="shipGrid" layoutX="466.0" layoutY="165.0" prefHeight="467.0" prefWidth="467.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+      <GridPane fx:id="boardGrid" layoutX="466.0" layoutY="165.0" prefHeight="467.0" prefWidth="467.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+      </GridPane>
+      <Text fx:id="playerPhaseInfo" fill="#3f83d7" layoutX="187.0" layoutY="69.0" stroke="BLACK" text="Player-# placement phase" textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="43.0" />
+         </font>
+      </Text>
+      <Text fx:id="donePlacementText" fill="#3f83d7" layoutX="187.0" layoutY="360.0" stroke="BLACK" style="visibility: hidden;" text="Player-# ships are afloat!&#10;&#10;click to continue..." textAlignment="CENTER" wrappingWidth="1026.13671875">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="43.0" />
+         </font>
+      </Text>
+   </children>
+</Pane>
