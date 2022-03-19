@@ -12,15 +12,6 @@ public abstract class Utilities {
         return true;
     }
 
-    public static boolean arrayContains(Integer[] array, Integer i){
-        for (Integer element : array){
-            if (Objects.equals(i, element)){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static int[] toArray(String string){
         string = string.replace("[", "");
         string = string.replace("]", "");

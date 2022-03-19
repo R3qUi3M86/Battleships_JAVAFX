@@ -1,6 +1,7 @@
 package com.battleships.view;
 
 import com.battleships.BattleshipsWindowed;
+import com.battleships.controller.GameController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,7 +22,8 @@ public class WindowPlacementRenderer {
     }
 
     public void renderPlacementPhase() {
-        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("placement_10.fxml"));
+        String boardSizeStr = Integer.toString(GameController.getInstance().getBoardSize());
+        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("placement_"+boardSizeStr+".fxml"));
         loadScene(fxmlLoader);
         windowPlacementController = fxmlLoader.getController();
         window.setScene(placementScene);

@@ -1,6 +1,7 @@
 package com.battleships.view;
 
 import com.battleships.BattleshipsWindowed;
+import com.battleships.controller.GameController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -21,7 +22,8 @@ public class WindowRoundRenderer {
     }
 
     public void renderRoundPhase() {
-        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("game_10.fxml"));
+        String boardSizeStr = Integer.toString(GameController.getInstance().getBoardSize());
+        FXMLLoader fxmlLoader = new FXMLLoader(BattleshipsWindowed.class.getResource("game_"+boardSizeStr+".fxml"));
         loadScene(fxmlLoader);
         windowRoundController = fxmlLoader.getController();
         windowRoundController.showPlayerPhaseOverlay(roundScene);

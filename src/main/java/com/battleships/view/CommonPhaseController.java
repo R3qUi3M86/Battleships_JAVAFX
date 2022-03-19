@@ -12,13 +12,17 @@ import javafx.scene.text.Text;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static com.battleships.view.ImgConstantsProvider.*;
+
 public class CommonPhaseController {
     WindowPlacementController windowPlacementController;
     WindowRoundController windowRoundController;
 
     private final int LAYOUT_X_START;
-    private final int LAYOUT_Y_START;
-    private final int BASE_SIZE;
+    private final int LAYOUT_Y_START = getLayoutYStart();
+
+    private final int SELECTOR_BASE_SIZE = getSelectorBaseSize();
+    private final double SHIP_IMG_SIZE = getShipImgCellSize();
 
     private Image gunboatImg;
     private Image cruiserImg;
@@ -26,17 +30,13 @@ public class CommonPhaseController {
     private Image carrierImg;
 
     public CommonPhaseController(WindowPlacementController controller){
-        LAYOUT_X_START = 449;
-        LAYOUT_Y_START = 149;
-        BASE_SIZE = 52;
+        LAYOUT_X_START = getPlacementLayoutXStart();
         loadShipImages();
         windowPlacementController = controller;
     }
 
     public CommonPhaseController(WindowRoundController controller){
-        LAYOUT_X_START = 779;
-        LAYOUT_Y_START = 149;
-        BASE_SIZE = 52;
+        LAYOUT_X_START = getShootingLayoutXStart();
         loadShipImages();
         windowRoundController = controller;
     }
@@ -83,14 +83,14 @@ public class CommonPhaseController {
             sizeMultiplier = 3;
         }
         if (shipOrientation == ShipOrientation.HORIZONTAL){
-            fldSelector.setWidth(BASE_SIZE + (sizeMultiplier*50));
-            fldSelector.setHeight(BASE_SIZE);
+            fldSelector.setWidth(SELECTOR_BASE_SIZE + (sizeMultiplier*SHIP_IMG_SIZE));
+            fldSelector.setHeight(SELECTOR_BASE_SIZE);
         } else {
-            fldSelector.setHeight(BASE_SIZE + (sizeMultiplier*50));
-            fldSelector.setWidth(BASE_SIZE);
+            fldSelector.setHeight(SELECTOR_BASE_SIZE + (sizeMultiplier*SHIP_IMG_SIZE));
+            fldSelector.setWidth(SELECTOR_BASE_SIZE);
         }
-        fldSelector.setLayoutX(coordinate[1]*50+LAYOUT_X_START);
-        fldSelector.setLayoutY(coordinate[0]*50+LAYOUT_Y_START);
+        fldSelector.setLayoutX(coordinate[1]*SHIP_IMG_SIZE+LAYOUT_X_START);
+        fldSelector.setLayoutY(coordinate[0]*SHIP_IMG_SIZE+LAYOUT_Y_START);
         fldSelector.setVisible(true);
     }
 
@@ -119,31 +119,31 @@ public class CommonPhaseController {
         switch (shipType){
             case GUN_BOAT -> {
                 shipImgView = new ImageView(gunboatImg);
-                shipImgView.setFitWidth(50);
-                shipImgView.setFitHeight(50);
+                shipImgView.setFitWidth(SHIP_IMG_SIZE);
+                shipImgView.setFitHeight(SHIP_IMG_SIZE);
             }
             case CRUISER -> {
                 shipImgView = new ImageView(cruiserImg);
-                shipImgView.setFitWidth(100);
-                shipImgView.setFitHeight(50);
+                shipImgView.setFitWidth(SHIP_IMG_SIZE*2);
+                shipImgView.setFitHeight(SHIP_IMG_SIZE);
             }
             case BATTLESHIP -> {
                 shipImgView = new ImageView(battleshipImg);
-                shipImgView.setFitWidth(150);
-                shipImgView.setFitHeight(50);
+                shipImgView.setFitWidth(SHIP_IMG_SIZE*3);
+                shipImgView.setFitHeight(SHIP_IMG_SIZE);
             }
             case CARRIER -> {
                 shipImgView = new ImageView(carrierImg);
-                shipImgView.setFitWidth(200);
-                shipImgView.setFitHeight(50);
+                shipImgView.setFitWidth(SHIP_IMG_SIZE*4);
+                shipImgView.setFitHeight(SHIP_IMG_SIZE);
             }
         }
         if (shipOrientation == ShipOrientation.VERTICAL){
             shipImgView.setRotate(90);
             switch (shipType){
-                case CRUISER -> {shipImgView.setTranslateX(-25); shipImgView.setTranslateY(25);}
-                case BATTLESHIP -> {shipImgView.setTranslateX(-50); shipImgView.setTranslateY(50);}
-                case CARRIER -> {shipImgView.setTranslateX(-75); shipImgView.setTranslateY(75);}
+                case CRUISER -> {shipImgView.setTranslateX(-SHIP_IMG_SIZE/2); shipImgView.setTranslateY(SHIP_IMG_SIZE/2);}
+                case BATTLESHIP -> {shipImgView.setTranslateX(-SHIP_IMG_SIZE); shipImgView.setTranslateY(SHIP_IMG_SIZE);}
+                case CARRIER -> {shipImgView.setTranslateX(-(SHIP_IMG_SIZE+(SHIP_IMG_SIZE/2))); shipImgView.setTranslateY(SHIP_IMG_SIZE+(SHIP_IMG_SIZE/2));}
             }
         }
         shipGrid.add(shipImgView, coordinate[1], coordinate[0]);

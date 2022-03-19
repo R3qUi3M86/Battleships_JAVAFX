@@ -22,7 +22,7 @@ public class Ship {
 
     public ShipModule getShipModule(int x, int y) {
         int[] coordinates = {x, y};
-        return shipModules.get(coordinates);
+        return shipModules.get(Arrays.toString(coordinates));
     }
 
     private void createGunBoat(int[] origin){

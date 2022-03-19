@@ -95,8 +95,10 @@ public class WindowRoundController {
             showShotResult(GameController.getInstance().takeShotInput(coordinate));
             setShotsAmountInfo();
             if (GameController.getInstance().getGameState().getCurrentPlayerShots() == 0) {
-                endTurnBtn.setVisible(true);
                 commonPhaseController.hideBoardFieldSelector(boardFldSelector);
+                if (!GameController.getInstance().playerHasWon()) {
+                    endTurnBtn.setVisible(true);
+                }
             }
         }
     }
@@ -110,15 +112,31 @@ public class WindowRoundController {
 
     private void drawShotResultOverlay(GridPane overlayGrid, Board board){
         overlayGrid.getChildren().clear();
+        double imgSize = ImgConstantsProvider.getShipImgCellSize();
         for (int i = 0; i < GameController.getInstance().getBoardSize(); i++){
             for (int j = 0; j < GameController.getInstance().getBoardSize(); j++){
 
                 int[] coordinate = new int[]{i,j};
                 FieldContent fieldContent = board.getBoardField(coordinate).getFieldContent();
                 switch (fieldContent){
-                    case MISS -> overlayGrid.add(new ImageView(missImg),j,i);
-                    case HIT -> overlayGrid.add(new ImageView(hitImg),j,i);
-                    case SUNK -> overlayGrid.add(new ImageView(sunkImg),j,i);
+                    case MISS -> {
+                        ImageView missImgView = new ImageView(missImg);
+                        missImgView.setFitWidth(imgSize);
+                        missImgView.setFitHeight(imgSize);
+                        overlayGrid.add(missImgView,j,i);
+                    }
+                    case HIT -> {
+                        ImageView hitImgView = new ImageView(hitImg);
+                        hitImgView.setFitWidth(imgSize);
+                        hitImgView.setFitHeight(imgSize);
+                        overlayGrid.add(hitImgView,j,i);
+                    }
+                    case SUNK -> {
+                        ImageView sunkImgView = new ImageView(sunkImg);
+                        sunkImgView.setFitWidth(imgSize);
+                        sunkImgView.setFitHeight(imgSize);
+                        overlayGrid.add(sunkImgView,j,i);
+                    }
                 }
             }
         }

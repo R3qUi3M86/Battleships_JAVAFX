@@ -3,7 +3,6 @@ package com.battleships.controller;
 import com.battleships.model.*;
 import com.battleships.util.Utilities;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
