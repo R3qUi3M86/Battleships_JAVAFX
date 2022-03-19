@@ -8,11 +8,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ShipDeployer {
-    public boolean shipDeploymentIsLegal(ShipType shipType, int[] origin) {
+    public boolean shipDeploymentIsLegal(ShipType shipType, int[] origin, Board board) {
         Set<int[]> shipFields = getShipDeploymentFields(shipType, origin);
         return !moduleOutsideBoard(shipFields)
-                && !moduleCollidesWithAnotherShip(shipFields)
-                && !moduleTouchAnotherShip(shipFields);
+                && !moduleCollidesWithAnotherShip(shipFields, board)
+                && !moduleTouchAnotherShip(shipFields, board)
+                && modulesFieldsIsWater(shipFields, board);
     }
 
     private Set<int[]> getShipDeploymentFields(ShipType shipType, int[] origin) {
@@ -35,8 +36,7 @@ public class ShipDeployer {
         return false;
     }
 
-    private boolean moduleCollidesWithAnotherShip(Set<int[]> shipFields){
-        Board board = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+    private boolean moduleCollidesWithAnotherShip(Set<int[]> shipFields, Board board){
         for (int[] coordinate : shipFields) {
             if (board.getBoardField(coordinate).getFieldContent() == FieldContent.MODULE){
                 return true;
@@ -45,8 +45,7 @@ public class ShipDeployer {
         return false;
     }
 
-    private boolean moduleTouchAnotherShip(Set<int[]> shipFields){
-        Board board = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+    private boolean moduleTouchAnotherShip(Set<int[]> shipFields, Board board){
         Set<int[]> shipVicinityFields = new HashSet<>();
         for (int[] shipField : shipFields){
             shipVicinityFields.addAll(getAdjacentFields(shipField));
@@ -60,7 +59,16 @@ public class ShipDeployer {
         return false;
     }
 
-    private Set<int[]> getAdjacentFields(int[] shipField){
+    private boolean modulesFieldsIsWater(Set<int[]> shipFields, Board board){
+        for (int[] shipField : shipFields){
+            if (board.getBoardField(shipField).getFieldContent() != FieldContent.WATER){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Set<int[]> getAdjacentFields(int[] shipField){
         Set<int[]> adjacentFields = new HashSet<>();
         if(shipField[0]-1 >= 0){
             adjacentFields.add(new int[]{shipField[0]-1, shipField[1]});

@@ -1,6 +1,7 @@
 package com.battleships.controller;
 
 import com.battleships.model.MainMenu;
+import com.battleships.model.ShotResult;
 import com.battleships.view.WindowPlacementRenderer;
 import com.battleships.view.WindowMenuRenderer;
 import com.battleships.view.WindowRoundRenderer;
@@ -40,6 +41,12 @@ public final class ViewController {
     }
 
     public void displayShootingPhase(){
-        roundRenderer.renderRoundPhase();
+        roundRenderer.renderPlayerRoundPhase();
     }
+
+    public void displayComputerShootingPhase() { roundRenderer.renderComputerRoundPhase();}
+
+    public void showAIShotResult(ShotResult shotResult) {roundRenderer.showAIShotResult(shotResult);}
+
+    public void setInfoElementsUI() {roundRenderer.setInfoElementsUI();}
 }

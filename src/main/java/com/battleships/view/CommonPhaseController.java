@@ -43,9 +43,9 @@ public class CommonPhaseController {
 
     public void setPlayerNumber(Text text){
         if (GameController.getInstance().getCurrentPlayer() == Player.PLAYER1) {
-            text.setText(text.getText().replace("#", "1"));
+            text.setText(text.getText().replaceAll("[0-9#]", "1"));
         } else {
-            text.setText(text.getText().replace("#", "2"));
+            text.setText(text.getText().replaceAll("[0-9#]", "2"));
         }
     }
 

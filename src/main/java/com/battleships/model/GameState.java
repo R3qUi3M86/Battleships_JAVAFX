@@ -156,9 +156,9 @@ public class GameState {
         }
     }
 
-    public int getLargestShipAfloatSize(){
+    public int getLargestShipAfloatSize(ArrayList<Ship> ships){
         int largestShipSize = 1;
-        for (Ship ship : getCurrentPlayerShips()){
+        for (Ship ship : ships){
             if (ship.getShipSize() > largestShipSize){
                 largestShipSize = ship.getShipSize();
             }

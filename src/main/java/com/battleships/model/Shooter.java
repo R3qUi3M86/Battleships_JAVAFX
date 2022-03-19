@@ -22,6 +22,7 @@ public class Shooter {
             setRepeatingShot();
         } else if (targetFieldContent == FieldContent.WATER){
             setMissedShot(FOWBoard.getBoardField(coordinate));
+            setMissedShot(enemyBoard.getBoardField(coordinate));
         } else if (targetFieldContent == FieldContent.MODULE){
             setHitShot(FOWBoard.getBoardField(coordinate));
             damageModule();
@@ -36,8 +37,8 @@ public class Shooter {
         shootResult = ShotResult.REPEATING;
     }
 
-    private void setMissedShot(BoardField FOWBoardField){
-        FOWBoardField.setFieldContent(FieldContent.MISS);
+    private void setMissedShot(BoardField boardField){
+        boardField.setFieldContent(FieldContent.MISS);
         shootResult = ShotResult.MISSED;
     }
 

@@ -1,8 +1,10 @@
 package com.battleships.view;
 
 import com.battleships.controller.GameController;
+import com.battleships.controller.GameMode;
 import com.battleships.controller.ViewController;
 import com.battleships.model.*;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -45,12 +47,12 @@ public class WindowRoundController {
         Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
         Board currPlayerFOWBoard = GameController.getInstance().getGameState().getCurrentFogOfWarBoard();
         Board enemyPlayerFOWBoard = GameController.getInstance().getGameState().getEnemyFogOfWarBoard();
-        commonPhaseController.setPlayerNumber(playerTurnCornerInfo);
         commonPhaseController.drawShipsOnBoardGrid(playerShipGrid, currPlayerBoard, currPlayer);
         commonPhaseController.drawShipsOnBoardGrid(enemyShipGrid, enemyPlayerFOWBoard, enemyPlayer);
         drawShotResultOverlay(playerShootingOverlay, currPlayerFOWBoard);
         drawShotResultOverlay(enemyShootingOverlay, enemyPlayerFOWBoard);
         commonPhaseController.addBoardGridUIActionListener(enemyBoardGrid, GamePhase.SHOOTING);
+        setPlayerNumber();
         setShotsAmountInfo();
         endTurnBtn.setVisible(false);
         endTurnBtn.setOnAction(e -> endTurnHandler());
@@ -59,14 +61,37 @@ public class WindowRoundController {
         boardRegion.setOnMouseEntered(e -> commonPhaseController.hideBoardFieldSelector(boardFldSelector));
     }
 
+    public void removeBoardGridUI(){
+        enemyBoardGrid.getChildren().clear();
+    }
+
     public void showPlayerPhaseOverlay(Scene scene){
         seaImgView.toFront();
         playerPhaseInfo.toFront();
         commonPhaseController.setPlayerNumber(playerPhaseInfo);
-        scene.setOnMouseClicked(e ->{
+        scene.setOnMouseClicked(mouseEvent -> {
             playerPhaseInfo.setVisible(false);
             seaImgView.toBack();
+            scene.setOnMouseClicked(evt->{});
+            setAIShootingHandler();
         });
+    }
+
+    private void setAIShootingHandler(){
+        Scene scene = boardRegion.getScene();
+        if (GameController.getInstance().getGameMode() == GameMode.PLAYER_VS_COMPUTER &&
+                GameController.getInstance().getCurrentPlayer() == Player.PLAYER2){
+            scene.setOnMouseClicked(e -> {
+                GameController.getInstance().aiShoot();
+                if(GameController.getInstance().getGameState().getCurrentPlayerShots() == 0){
+                    scene.setOnMouseClicked(evt->{});
+                }
+            });
+        }
+    }
+
+    public void setIncomingFireText(){
+        playerPhaseInfo.setText("Incoming fire from enemy fleet!");
     }
 
     private void loadMarkerImages(){
@@ -75,7 +100,7 @@ public class WindowRoundController {
         sunkImg = ImageLoader.loadImage("sunk.png");
     }
 
-    private void setShotsAmountInfo(){
+    public void setShotsAmountInfo(){
         int shots = GameController.getInstance().getGameState().getCurrentPlayerShots();
         shotsInfo.setText(shotsInfo.getText().replaceAll("[0-9#]", Integer.toString(shots)));
     }
@@ -92,7 +117,7 @@ public class WindowRoundController {
         if (GameController.getInstance().getGameState().getCurrentPlayerShots() > 0) {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
-            showShotResult(GameController.getInstance().takeShotInput(coordinate));
+            showPlayerShotResult(GameController.getInstance().takeShotInput(coordinate));
             setShotsAmountInfo();
             if (GameController.getInstance().getGameState().getCurrentPlayerShots() == 0) {
                 commonPhaseController.hideBoardFieldSelector(boardFldSelector);
@@ -103,11 +128,28 @@ public class WindowRoundController {
         }
     }
 
-    private void showShotResult(ShotResult shotResult){
+    public void takeShotFromComputerPlayer(ShotResult shotResult){
+        showComputerShotResult(shotResult);
+        setShotsAmountInfo();
+        if (GameController.getInstance().getGameState().getCurrentPlayerShots() == 0 &&
+                !GameController.getInstance().playerHasWon()) {
+            endTurnBtn.setVisible(true);
+        }
+    }
+
+    private void showPlayerShotResult(ShotResult shotResult){
         Board enemyPlayerFOWBoard = GameController.getInstance().getGameState().getEnemyFogOfWarBoard();
         commonPhaseController.drawShipsOnBoardGrid(enemyShipGrid, enemyPlayerFOWBoard, GameController.getInstance().getEnemyPlayer());
         drawShotResultOverlay(enemyShootingOverlay, enemyPlayerFOWBoard);
-        setShotResultText(shotResult);
+        setPlayerShotResultText(shotResult);
+        checkWin(shotResult);
+    }
+
+    private void showComputerShotResult(ShotResult shotResult){
+        Board playerBoard = GameController.getInstance().getGameState().getEnemyFogOfWarBoard();
+        drawShotResultOverlay(playerShootingOverlay, playerBoard);
+        setComputerShotResultText(shotResult);
+        checkWin(shotResult);
     }
 
     private void drawShotResultOverlay(GridPane overlayGrid, Board board){
@@ -142,7 +184,7 @@ public class WindowRoundController {
         }
     }
 
-    private void setShotResultText(ShotResult shotResult){
+    private void setPlayerShotResultText(ShotResult shotResult){
         switch (shotResult){
             case MISSED -> shotPrompter.setText("We splashed some water...");
             case HIT_SOMETHING -> shotPrompter.setText("Direct hit!");
@@ -152,6 +194,20 @@ public class WindowRoundController {
             case SUNK_BB -> shotPrompter.setText("Enemy battleship sunk!");
             case SUNK_CA -> shotPrompter.setText("Enemy carrier sunk!");
         }
+    }
+
+    private void setComputerShotResultText(ShotResult shotResult){
+        switch (shotResult){
+            case MISSED -> shotPrompter.setText("Good! They missed...");
+            case HIT_SOMETHING -> shotPrompter.setText("Our vessel took a direct hit!");
+            case SUNK_GB -> shotPrompter.setText("They sunk our gunboat admiral!");
+            case SUNK_CR -> shotPrompter.setText("They sunk our cruiser admiral!");
+            case SUNK_BB -> shotPrompter.setText("They sunk our battleship admiral!");
+            case SUNK_CA -> shotPrompter.setText("They sunk our carrier admiral!");
+        }
+    }
+
+    private void checkWin(ShotResult shotResult){
         if ((shotResult == ShotResult.SUNK_GB || shotResult == ShotResult.SUNK_CR ||
                 shotResult == ShotResult.SUNK_BB || shotResult == ShotResult.SUNK_CA) &&
                 GameController.getInstance().playerHasWon()){
@@ -160,9 +216,18 @@ public class WindowRoundController {
     }
 
     private void showEndGameResults(){
-        Board enemyBoard = GameController.getInstance().getGameState().getEnemyPlayerBoard();
-        Player enemyPlayer = GameController.getInstance().getEnemyPlayer();
+        Board enemyBoard;
+        Player enemyPlayer;
+        if (GameController.getInstance().getGameMode() == GameMode.PLAYER_VS_COMPUTER &&
+                GameController.getInstance().getCurrentPlayer() == Player.PLAYER2){
+            enemyBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+            enemyPlayer = GameController.getInstance().getCurrentPlayer();
+        } else {
+            enemyBoard = GameController.getInstance().getGameState().getEnemyPlayerBoard();
+            enemyPlayer = GameController.getInstance().getEnemyPlayer();
+        }
         commonPhaseController.drawShipsOnBoardGrid(enemyShipGrid, enemyBoard, enemyPlayer);
+
         playerTurnCornerInfo.setVisible(false);
         shotsInfo.setVisible(false);
         endTurnBtn.setVisible(false);
@@ -184,5 +249,9 @@ public class WindowRoundController {
 
     private void backToMenuHandler(){
         ViewController.getInstance().displayMainMenu();
+    }
+
+    public void setPlayerNumber() {
+        commonPhaseController.setPlayerNumber(playerTurnCornerInfo);
     }
 }

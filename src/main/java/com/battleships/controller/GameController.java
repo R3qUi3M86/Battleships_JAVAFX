@@ -2,6 +2,9 @@ package com.battleships.controller;
 
 import com.battleships.model.*;
 import com.battleships.model.ShotResult;
+import com.battleships.model.computerPlayer.AILogicPipeline;
+
+import java.util.ArrayList;
 
 public final class GameController {
     private static GameController gameController;
@@ -11,6 +14,7 @@ public final class GameController {
     private int shotsPerPlayer = 3;
     private GameState gameState;
     private final ShipDeployer shipDeployer = new ShipDeployer();
+    private final AILogicPipeline Ai = new AILogicPipeline();
     private Player currentPlayer;
     private ShipOrientation shipOrientation = ShipOrientation.HORIZONTAL;
 
@@ -39,13 +43,23 @@ public final class GameController {
     private void startGame(){
         gameState = new GameState(boardSize);
         determineCurrentPlayer();
-        ViewController.getInstance().displayPlacementPhase();
+        if (currentPlayer == Player.PLAYER2 && gameMode == GameMode.PLAYER_VS_COMPUTER){
+            Ai.deployAllShips();
+            startNextPlacementPhase();
+        } else {
+            ViewController.getInstance().displayPlacementPhase();
+        }
     }
 
     public void startNextPlacementPhase(){
         switchPlayers();
         shipOrientation = ShipOrientation.HORIZONTAL;
-        ViewController.getInstance().displayPlacementPhase();
+        if (currentPlayer == Player.PLAYER2 && gameMode == GameMode.PLAYER_VS_COMPUTER){
+            Ai.deployAllShips();
+            playRound();
+        } else {
+            ViewController.getInstance().displayPlacementPhase();
+        }
     }
 
     private void determineCurrentPlayer(){
@@ -54,30 +68,45 @@ public final class GameController {
         } else {
             currentPlayer = Player.PLAYER2;
         }
-        System.out.println(currentPlayer);
     }
 
     public void playRound(){
+        if (gameMode == GameMode.PLAYER_VS_PLAYER || getEnemyPlayer() == Player.PLAYER1) {
+            playPlayerRound();
+        } else {
+            playComputerRound();
+        }
+    }
+
+    private void playPlayerRound(){
         switchPlayers();
         setShotsForCurrentPlayer();
         ViewController.getInstance().displayShootingPhase();
+    }
+
+    private void playComputerRound(){
+        ViewController.getInstance().displayComputerShootingPhase();
+        switchPlayers();
+        setShotsForCurrentPlayer();
+        ViewController.getInstance().setInfoElementsUI();
     }
 
     private void setShotsForCurrentPlayer(){
         if (shootingMode == ShootingMode.STATIC){
             gameState.setCurrentPlayerShots(shotsPerPlayer);
         } else {
-            gameState.setCurrentPlayerShots(gameState.getLargestShipAfloatSize());
+            gameState.setCurrentPlayerShots(gameState.getLargestShipAfloatSize(gameState.getCurrentPlayerShips()));
         }
-    }
-
-    private void playerIsHuman(){
     }
 
     public ShotResult takeShotInput(int[] coordinate) {
         Shooter shooter = new Shooter(gameState, coordinate);
         shooter.shoot();
         return shooter.getShotResult();
+    }
+
+    public void aiShoot(){
+        ViewController.getInstance().showAIShotResult(takeShotInput(Ai.getShot()));
     }
 
     public void switchShipOrientation(){

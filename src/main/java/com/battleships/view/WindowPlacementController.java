@@ -141,7 +141,8 @@ public class WindowPlacementController {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
             ShipType deployedShipType = getDeployedShipType();
-            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShipType, coordinate)){
+            Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShipType, coordinate, currPlayerBoard)){
                 commonPhaseController.showBoardFieldSelector(deployedShipType, coordinate, boardFldSelector);
             } else {
                 commonPhaseController.hideBoardFieldSelector(boardFldSelector);
@@ -154,11 +155,11 @@ public class WindowPlacementController {
             Node node = (Node) event.getTarget();
             int[] coordinate = new int[]{GridPane.getRowIndex(node), GridPane.getColumnIndex(node)};
             ShipType deployedShip = getDeployedShipType();
-            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShip, coordinate)){
+            Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
+            if(GameController.getInstance().getShipDeployer().shipDeploymentIsLegal(deployedShip, coordinate, currPlayerBoard)){
                 GameController.getInstance().getShipDeployer().deployShip(deployedShip, coordinate);
                 setShipsAmount(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
                 disableVoidShipsUI(GameController.getInstance().getGameState().getCurrentPlayerShipsInPort());
-                Board currPlayerBoard = GameController.getInstance().getGameState().getCurrentPlayerBoard();
                 commonPhaseController.drawShipsOnBoardGrid(shipGrid, currPlayerBoard, GameController.getInstance().getCurrentPlayer());
                 commonPhaseController.hideBoardFieldSelector(boardFldSelector);
                 if (GameController.getInstance().getGameState().allShipsAreAfloat()){
